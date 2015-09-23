@@ -1,6 +1,13 @@
 from os.path import exists
+from decimal import Decimal
+import time
 
-# bal = 0
+# Blobal variables
+targetFile = ""
+bal = 0
+transactList = {1:'Food/Coffee', 2:'Grocery', 3:'"Stuff"', 4:'Booze', 5:'Gas',
+                6:'Car_Payment/Insurance', 7:'Student_Loan', 8:'Misc_Payment',
+                9:'Misc_Expense', 10:'Paycheck', 11:'Deposit'}
 
 # Yes or no input
 def userAffirm():
@@ -46,11 +53,13 @@ def fileOpen(isNew):
 
     # Open file for appending
     print "Opening %s!" % fileName
-    target = open(fileName, 'a')
+    global targetFile
+    targetFile = open(fileName, 'a+')
+    if targetFile.read() == "":
+        targetFile.write("File Created on %s\n---------------------------\n" % time.strftime("%m-%d-%y"))
 
 # Take in user input
 def userInput():
-    #transactList = []
 
     # Take in user input until 'x' is inputted
     while True:
@@ -58,25 +67,16 @@ def userInput():
         userIn = raw_input('>> ')
         if userIn is 'x':
             break
-        # Convert string input to float value
+        # Convert string input to rounded decimal value
         try:
-            transaction = float(userIn)
+            transaction = round(Decimal(userIn), 2)
         except ValueError:
             print "Please enter a valid monetary value!"
             continue
 
-        print """Please input Transaction ID from list:
-        1: Food / Coffee (-)
-        2: Grocery (-)
-        3: "Stuff" (-)
-        4: Booze (-)
-        5: Gas (-)
-        6: Car Payment / Insurance (-)
-        7: Student Loan (-)
-        8: Misc. Payment (-)
-        9: Misc. Expense (-)
-        10: Paycheck (+)
-        11: Deposit (+)"""
+        print "Please input Transaction ID from list:"
+        for k in transactList:
+            print "   %r\t=   %s" % (k, transactList[k]) 
 
         # Ask for selection until valid input received
         while True:
@@ -86,11 +86,12 @@ def userInput():
                 transactType = int(userIn)
                 # If input is 1 - 9
                 if 1 <= transactType <= 9:
-                    transactMsg = "Debiting %f as an expenditure of ID %i." % (transaction, transactType)
+                    print "Debiting $%s as a(n) %s expenditure." % (transaction, transactList[transactType])
+                    transaction *= -1
                     break
                 # If input is 10 - 11
                 elif 10 <= transactType <= 11:
-                    transactMsg = "Crediting %f as a deposit of ID %i." % (transaction, transactType)
+                    print "Crediting $%f as a deposit of ID %i." % (transaction, transactType)
                     break
                 else:
                     print "Invalid Transaction ID!"
@@ -98,7 +99,15 @@ def userInput():
                 print "Please enter a valid selection!"
                 continue
 
-        print transactMsg + "\n"
+        fileWrite(transaction, transactList[transactType])
+
+def fileWrite(trans, transType):
+
+    line =  "%8s  %8s  %s\n" % (time.strftime("%m-%d-%y"), trans, transType)
+    print line
+    targetFile.write(line)
+
+
 
 if __name__ == "__main__":
     fileOpen(isNewPeriod())
