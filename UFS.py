@@ -2,9 +2,9 @@ from os.path import exists
 from decimal import Decimal
 import time
 
-# Blobal variables
+# Global variables
 targetFile = ""
-bal = 0
+bal = spent = round(Decimal(0.00), 2)
 transactList = {1:'Food/Coffee', 2:'Grocery', 3:'"Stuff"', 4:'Booze', 5:'Gas',
                 6:'Car_Payment/Insurance', 7:'Student_Loan', 8:'Misc_Payment',
                 9:'Misc_Expense', 10:'Paycheck', 11:'Deposit'}
@@ -55,8 +55,8 @@ def fileOpen(isNew):
     print "Opening %s!" % fileName
     global targetFile
     targetFile = open(fileName, 'a+')
-    if targetFile.read() == "":
-        targetFile.write("File Created on %s\n---------------------------\n" % time.strftime("%m-%d-%y"))
+    # if targetFile.read() == "":
+    #     targetFile.write("File Created on %s\n---------------------------\n" % time.strftime("%m-%d-%y"))
 
 # Take in user input
 def userInput():
@@ -91,7 +91,7 @@ def userInput():
                     break
                 # If input is 10 - 11
                 elif 10 <= transactType <= 11:
-                    print "Crediting $%f as a deposit of ID %i." % (transaction, transactType)
+                    print "Crediting $%s via your %s." % (transaction, transactList[transactType])
                     break
                 else:
                     print "Invalid Transaction ID!"
@@ -99,7 +99,13 @@ def userInput():
                 print "Please enter a valid selection!"
                 continue
 
+        global bal
+        bal += transaction
+
         fileWrite(transaction, transactList[transactType])
+        
+    feedback()
+
 
 def fileWrite(trans, transType):
 
@@ -107,8 +113,18 @@ def fileWrite(trans, transType):
     print line
     targetFile.write(line)
 
+def feedback():
+    print """
+    Your current balance is %s
+    You have earned [unfinished].
+    You have spent [unfinished].""" % (bal)
 
-
+# Main function
 if __name__ == "__main__":
+    print """
+========================================
+ Welcome to SimpleUFS - Python Edition!
+========================================\n"""
+
     fileOpen(isNewPeriod())
     userInput()
