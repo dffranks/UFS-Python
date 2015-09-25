@@ -11,5 +11,6 @@ Current Features:
 Future Features:
 - Ability to view how much has been spent (or earned) for each transaction type (eg. How much have I spent on booze?).
 - Data such as percentages of income spent.
+- Database storage, file exporting.
 - *[Maybe]* Comparisons with an earlier period file.
 - *[Maybe]* Graphical representations (charts, etc).
