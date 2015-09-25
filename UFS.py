@@ -5,9 +5,10 @@ import time
 # Global variables
 targetFile = ""
 bal = spent = round(Decimal(0.00), 2)
-transactList = {1:'Food/Coffee', 2:'Grocery', 3:'"Stuff"', 4:'Booze', 5:'Gas',
-                6:'Car_Payment/Insurance', 7:'Student_Loan', 8:'Misc_Payment',
-                9:'Misc_Expense', 10:'Paycheck', 11:'Deposit'}
+transactList = {1:'Food/Coffee', 2:'Grocery/Supply', 3:'"Stuff"', 4:'Booze', 5:'Gas',
+                6:'Car_Payment/Insurance', 7:'Rent', 8:'Utilities/Internet',
+                9:'Student_Loan', 10:'Misc_Payment', 11:'Misc_Expense',
+                12:'Paycheck', 13:'Deposit'}
 
 # Yes or no input
 def userAffirm():
@@ -47,6 +48,7 @@ def fileOpen(isNew):
                 break
             # If NOT a new period, subtract 1 from fileID to use most recent file
             else:
+                if 
                 fileID -= 1
                 fileName = "PayPeriod_%d.ufs" % fileID
                 break
@@ -85,12 +87,12 @@ def userInput():
             try:
                 transactType = int(userIn)
                 # If input is 1 - 9
-                if 1 <= transactType <= 9:
+                if 1 <= transactType <= 11:
                     print "Debiting $%s as a(n) %s expenditure." % (transaction, transactList[transactType])
                     transaction *= -1
                     break
                 # If input is 10 - 11
-                elif 10 <= transactType <= 11:
+                elif 12 <= transactType <= 13:
                     print "Crediting $%s via your %s." % (transaction, transactList[transactType])
                     break
                 else:
