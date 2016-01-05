@@ -5,10 +5,10 @@ import time
 # Global variables
 targetFile = ""
 bal = spent = round(Decimal(0.00), 2)
-transactList = {1:'Food/Coffee', 2:'Grocery/Supply', 3:'"Stuff"', 4:'Booze', 5:'Gas',
-                6:'Car_Payment/Insurance', 7:'Rent', 8:'Utilities/Internet',
-                9:'Student_Loan', 10:'Misc_Payment', 11:'Misc_Expense',
-                12:'Paycheck', 13:'Deposit'}
+transactList = ['Food/Coffee', 'Grocery/Supply', '"Stuff"', 'Booze', 'Gas',
+                'CarPayment/Insurance', 'Rent', 'Utilities/Internet',
+                'StudentLoan', 'MiscPayment', 'Misc Expense',
+                'Paycheck', 'Deposit']
 
 # Yes or no input
 def userAffirm():
@@ -48,7 +48,7 @@ def fileOpen(isNew):
                 break
             # If NOT a new period, subtract 1 from fileID to use most recent file
             else:
-                if 
+              #  if 
                 fileID -= 1
                 fileName = "PayPeriod_%d.ufs" % fileID
                 break
@@ -77,8 +77,10 @@ def userInput():
             continue
 
         print "Please input Transaction ID from list:"
-        for k in transactList:
-            print "   %r\t=   %s" % (k, transactList[k]) 
+        i = 0
+        for item in transactList:
+            print "   %d\t=   %s" % (i, transactList[i])
+            i += 1
 
         # Ask for selection until valid input received
         while True:
@@ -86,19 +88,20 @@ def userInput():
             # Convert string input to int
             try:
                 transactType = int(userIn)
-                # If input is 1 - 9
-                if 1 <= transactType <= 11:
+                # If input isn't a deposit
+                if transactList[transactType] != 'Paycheck' and transactList[transactType] != 'Deposit':
                     print "Debiting $%s as a(n) %s expenditure." % (transaction, transactList[transactType])
                     transaction *= -1
                     break
-                # If input is 10 - 11
-                elif 12 <= transactType <= 13:
+                # If input is a deposit
+                elif transactList[transactType] == 'Paycheck' or transactList[transactType] == 'Deposit':
                     print "Crediting $%s via your %s." % (transaction, transactList[transactType])
                     break
-                else:
-                    print "Invalid Transaction ID!"
             except ValueError:
-                print "Please enter a valid selection!"
+                print "Please enter a numeric selection!"
+                continue
+            except IndexError:
+                print "Please enter one of the numeric ID's displayed!"
                 continue
 
         global bal
